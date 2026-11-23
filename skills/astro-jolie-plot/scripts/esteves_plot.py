@@ -1,4 +1,4 @@
-"""Plotting toolkit following the Anbajagane et al. (2026, OJA/DECADE)
+"""Plotting toolkit with a clean publication
 house style, paired with curated Sanzo Wada plates (vol1-164, vol1-2, vol1-267,
 vol1-331, vol1-323) and density-adaptive scatter / contour / histogram helpers.
 """
@@ -21,12 +21,12 @@ PALETTES: dict[str, list[str]] = {
     "traditional": ["firebrick", "black", "grey"],
     "hist2": ["skyblue", "red"],                                    # Favorite sns.histplot(..., kde=True) pair
     "skyblue_red": ["skyblue", "red"],
-    # Exact Anbajagane et al. (2026, DECADE_Clusters_20260831.pdf) vector hexes
-    "decade2": ["#219ebc", "#ffba0a"],                              # DECADE Teal, DES Marigold
-    "decade3": ["#f07167", "#219ebc", "#ffba0a"],                   # Coral, Teal, Marigold (terciles / g-r, r-i, i-z)
-    "decade4": ["#f07167", "#219ebc", "#ffba0a", "#c767ac"],        # + Orchid Plum (4 richness / z bins)
-    "decade5": ["#f07167", "#219ebc", "#ffba0a", "#c767ac", "#59a270"],  # + Sage Green (5th series, Fig. 2)
-    "decade_blues": ["#c6dbef", "#6baed6", "#2171b5"],              # ColorBrewer 3-bin Blues (Figs. F1-F2)
+    # Curated survey-comparison palettes
+    "pal2": ["#219ebc", "#ffba0a"],                              # Teal, Marigold
+    "pal3": ["#f07167", "#219ebc", "#ffba0a"],                   # Coral, Teal, Marigold (terciles / g-r, r-i, i-z)
+    "pal4": ["#f07167", "#219ebc", "#ffba0a", "#c767ac"],        # + Orchid Plum (4 richness / z bins)
+    "pal5": ["#f07167", "#219ebc", "#ffba0a", "#c767ac", "#59a270"],  # + Sage Green (5th series)
+    "blues3": ["#c6dbef", "#6baed6", "#2171b5"],              # ColorBrewer 3-bin Blues
     "getdist2": ["#e03424", "#006fed"],                             # GetDist lines (fills: #f3aea7, #99c5f8)
     # Sanzo Wada favorites
     "vol1-2": ["#12354e", "#f99d1b"],                               # Dark Tyrian Blue, Yellow Orange
@@ -40,10 +40,10 @@ PALETTES: dict[str, list[str]] = {
 }
 
 _COLORMAPS_STOPS: dict[str, tuple[str, list[str]]] = {
-    "decade_sky": ("div", ["#219ebc", "#ffffff", "#c767ac"]),       # Exact Fig. 2 (p.5) colorbar gradient
-    "decade_teal": ("seq", ["#ffffff", "#219ebc"]),                 # Exact Fig. 1 DECADE footprint ramp
-    "decade_gold": ("seq", ["#ffffff", "#ffba0a"]),                 # Exact Fig. 1 DES footprint ramp
-    "decade_blues": ("seq", ["#c6dbef", "#6baed6", "#2171b5"]),
+    "sky_div": ("div", ["#219ebc", "#ffffff", "#c767ac"]),       # Teal -> white -> plum diverging
+    "teal_seq": ("seq", ["#ffffff", "#219ebc"]),                 # White -> teal sequential
+    "gold_seq": ("seq", ["#ffffff", "#ffba0a"]),                 # White -> gold sequential
+    "blues3": ("seq", ["#c6dbef", "#6baed6", "#2171b5"]),
     "wada323": ("seq", ["#111314", "#762c19", "#b2b73e", "#fdc57e"]),
     "wada164_safe": ("seq", ["#4f4086", "#12354e", "#00978d", "#fcb315", "#dd4027"]),
     "tyrian_div": ("div", ["#12354e", "#f3efe6", "#dd4027"]),
@@ -59,7 +59,7 @@ def get_palette(
     family: str | None = None,
     index: int = 0,
 ) -> list[str]:
-    """Return a curated color list (`role='comparison'` -> traditional firebrick/black/grey; `categories` -> DECADE/Wada)."""
+    """Return a curated color list (`role='comparison'` -> traditional firebrick/black/grey; `categories` -> curated/Wada)."""
     if name is not None:
         key = name.lower()
         if key in PALETTES:
@@ -75,13 +75,13 @@ def get_palette(
     if role == "comparison" and n <= 3:
         return PALETTES["classic3"][:n]
     if n <= 2:
-        return PALETTES["decade2"][:n]
+        return PALETTES["pal2"][:n]
     if n == 3:
-        return PALETTES["decade3"]
+        return PALETTES["pal3"]
     if n == 4:
-        return PALETTES["decade4"]
+        return PALETTES["pal4"]
     if n == 5:
-        return PALETTES["decade5"]
+        return PALETTES["pal5"]
 
     try:
         import sanzo_wada as sw
@@ -96,7 +96,7 @@ def get_palette(
     return [mpl.colors.to_hex(cm(v)) for v in np.linspace(0.05, 0.95, n)]
 
 
-def get_cmap(name: str = "decade_sky", *, discrete: int | None = None):
+def get_cmap(name: str = "sky_div", *, discrete: int | None = None):
     """Return a matplotlib Colormap tuned to a specific visual role."""
     key = name.lower()
     if key in _COLORMAPS_STOPS:
@@ -118,7 +118,7 @@ def diverging_norm(data: np.ndarray, *, vcenter: float = 0.0, q: float = 99.0) -
 
 
 # ---------------------------------------------------------------------------
-# Typography, Frames & Axes Geometry (Anbajagane / OJA Default)
+# Typography, Frames & Axes Geometry (paper-mode default)
 # ---------------------------------------------------------------------------
 
 FRAME = "0.55"
@@ -161,11 +161,11 @@ def apply_style(mode: str = "daily", *, font_scale: float | None = None) -> None
     """Configure matplotlib/seaborn globally:
       - `daily` (aliases: `talk`, `wada`, default): Seaborn `style='white', context='talk', font_scale=0.8`
         with grey (`0.55`) spines/ticks and crisp white bar edges — fast, clean exploratory style.
-      - `paper` (aliases: `anbajagane`, `decade`): Serif + Computer Modern math (`cm`), grey (`0.55`)
+      - `paper`: Serif + Computer Modern math (`cm`), grey (`0.55`)
         4-sided boxed frames with inward major & minor ticks on all 4 sides, capless thin errorbars.
     """
     key = mode.lower()
-    if key in ("paper", "anbajagane", "decade"):
+    if key in ("paper",):
         plt.rcdefaults()
         mpl.rcParams.update({
             "axes.facecolor": "white",
@@ -209,7 +209,7 @@ def apply_style(mode: str = "daily", *, font_scale: float | None = None) -> None
         return
 
     if key not in ("daily", "talk", "wada"):
-        raise ValueError(f"Unknown style mode {mode!r}; expected 'daily'/'talk' or 'paper'/'anbajagane'.")
+        raise ValueError(f"Unknown style mode {mode!r}; expected 'daily'/'talk' or 'paper'.")
 
     try:
         import seaborn as sns
@@ -244,7 +244,7 @@ def apply_style(mode: str = "daily", *, font_scale: float | None = None) -> None
 def scatter_style(n: int, *, role: str = "auto") -> dict:
     """Return marker kwargs tuned to N without oversized blobs or washed-out fills.
 
-    - `open_ring` (default for comparison scatter like DECADE Fig. 3): hollow rings with crisp edges
+    - `open_ring` (default for comparison scatter): hollow rings with crisp edges
     - `discrete` (N <= 250): crisp solid points with white rim
     - `cloud`: tiny low-alpha rasterized dots behind medians/contours
     - `c_mapped`: saturated colored points with hairline rim when mapped to `c=z`
@@ -278,7 +278,7 @@ def plot_scatter_compare(
     label: str | None = None,
     open_rings: bool = True,
 ) -> None:
-    """Plot comparison scatter in Anbajagane Fig. 3 style (hollow translucent rings or micro-dots)."""
+    """Plot comparison scatter in open-ring style (hollow translucent rings or micro-dots)."""
     kw = scatter_style(len(x), role="open_ring" if open_rings else "cloud")
     if open_rings:
         ax.scatter(x, y, edgecolors=color, **kw)
@@ -312,7 +312,7 @@ def plot_step_hist(
     density: bool = True,
     label: str | None = None,
 ) -> None:
-    """Plot rich filled primary histogram (alpha=0.65) or unfilled step comparison histogram (Figs. 3 & 7)."""
+    """Plot rich filled primary histogram (alpha=0.65) or unfilled step comparison histogram."""
     if filled:
         _reject_dead_pale(color)
         ax.hist(data, bins=bins, density=density, histtype="stepfilled", color=color, alpha=alpha, edgecolor=color, linewidth=1.0, label=label)
@@ -391,7 +391,7 @@ def plot_filled_contours(
     label: str | None = None,
     levels: Sequence[float] = (0.01, 0.05, 0.32),
 ) -> None:
-    """Draw 68%, 95%, 99% KDE contours matching exact Anbajagane Fig. 5/6 alphas (0.35, 0.55, 0.75)."""
+    """Draw 68%, 95%, 99% KDE contours with graded alphas (0.35, 0.55, 0.75)."""
     import seaborn as sns
     lvls = sorted(levels)
     if filled:

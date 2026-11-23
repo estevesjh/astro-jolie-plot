@@ -193,7 +193,7 @@ def build_master_system_prompt(pass_threshold: int = 80) -> str:
         "paired with raw unnormalized bottom residual).\n"
         "- Populate `colormap_feedback` with a direct critique of the figure's palette/colormap, "
         "midpoint anchoring, AND saturation avoidance (flag clipped dark plateaus and recommend "
-        "soft truncated `RdBu_r` [0.10, 0.90] or `decade_sky` + `TwoSlopeNorm(vcenter=0.0)` with "
+        "soft truncated `RdBu_r` [0.10, 0.90] or `sky_div` + `TwoSlopeNorm(vcenter=0.0)` with "
         "98% bounds / headroom when saturation occurs).\n"
         "- Populate `filename_audit`: inspect `source_filename` and `filename_jargon_tokens`. If "
         "the filename contains opaque batch/code tokens (like `B1`, `B1B2`, `neg`, `CPF2`, "

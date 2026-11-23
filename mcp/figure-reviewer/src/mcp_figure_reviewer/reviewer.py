@@ -794,8 +794,6 @@ def run_deterministic_grade(
     is_esteves = (style_profile or "esteves").strip().lower() in {
         "esteves",
         "house",
-        "decade",
-        "anbajagane",
         "wada",
     }
 
@@ -898,7 +896,7 @@ def run_deterministic_grade(
         color_fixes.append(f"{mh.location}: {mh.detail}")
     if forensics.rainbow_jet_suspected:
         color_fixes.append(
-            "Replace rainbow/jet colormap with soft truncated RdBu_r [0.10, 0.90], decade_sky, or rocket_r."
+            "Replace rainbow/jet colormap with soft truncated RdBu_r [0.10, 0.90], sky_div, or rocket_r."
         )
     if forensics.saturation_clipping_suspected:
         color_fixes.append(
@@ -907,7 +905,7 @@ def run_deterministic_grade(
         )
     if is_esteves and forensics.tab10_suspected and not forensics.matched_house_palettes:
         color_fixes.append(
-            "Replace default matplotlib tab10 hues with curated decade2/3/4/5, classic3, or Sanzo Wada palette."
+            "Replace default matplotlib tab10 hues with curated pal2/3/4/5, classic3, or Sanzo Wada palette."
         )
     if is_esteves and forensics.dead_pale_pixel_fraction > 0.06 and not forensics.likely_heatmap_or_colorbar:
         color_fixes.append(
@@ -1001,9 +999,9 @@ def run_deterministic_grade(
         cm_compliance = "ALIGNED"
 
     recommended_cmap = (
-        "Soft RdBu_r [0.10, 0.90] + TwoSlopeNorm(vcenter=0.0) or decade_sky"
+        "Soft RdBu_r [0.10, 0.90] + TwoSlopeNorm(vcenter=0.0) or sky_div"
         if (forensics.rainbow_jet_suspected or forensics.saturation_clipping_suspected or midpoint_hits)
-        else ("decade2/3/4/5 or Sanzo Wada (vol1-164 / vol1-2)" if (is_esteves and forensics.tab10_suspected) else "Keep current")
+        else ("pal2/3/4/5 or Sanzo Wada (vol1-164 / vol1-2)" if (is_esteves and forensics.tab10_suspected) else "Keep current")
     )
 
     checklist: list[str] = []

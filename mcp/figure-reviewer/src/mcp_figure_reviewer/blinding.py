@@ -246,7 +246,7 @@ def evaluate_fast_fail_blockers(
     if color_forensics.rainbow_jet_suspected:
         blockers.append(
             "Rainbow/jet-like full-spectrum colormap detected: replace with soft RdBu_r "
-            "[0.10, 0.90], decade_sky, or a perceptually uniform sequential map before LLM review."
+            "[0.10, 0.90], sky_div, or a perceptually uniform sequential map before LLM review."
         )
     if color_forensics.saturation_clipping_suspected:
         blockers.append(

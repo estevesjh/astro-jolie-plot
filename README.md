@@ -198,7 +198,7 @@ uv run --directory mcp/figure-reviewer --with pytest --with pytest-asyncio pytes
 
 ## Credits
 
-The paper mode follows the figure conventions of the DECADE cluster paper (Anbajagane et al. 2026). Palettes draw on Sanzo Wada's *A Dictionary of Color Combinations*, through [`sanzo-wada-colors`](https://github.com/estevesjh/sanzo-wada-colors).
+Palettes draw on Sanzo Wada's *A Dictionary of Color Combinations*, through [`sanzo-wada-colors`](https://github.com/estevesjh/sanzo-wada-colors).
 
 ## License
 

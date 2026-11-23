@@ -200,7 +200,7 @@ async def grade_blind_review(
     Pass either the `review_id` from `blind_review_figure` or the blind review JSON dict.
     Runs a 0-token deterministic notation/jargon + color forensics scan plus Master evaluation:
       - Conclusion accuracy (0-40) + Variable clarity (0-35) + Visual & colormap design (0-25).
-    `style_profile="esteves"` (default) checks the Anbajagane/DECADE + Sanzo Wada palette
+    `style_profile="esteves"` (default) checks the house style + Sanzo Wada palette
     and diverging percentile-stretch rules; pass `"generic"` or custom `color_preferences` to override.
     Returns `phase1_score`, `phase1_letter_grade`, `phase1_passed` (hard gate unlocking Phase 2),
     `phase1_grade_id`, `colormap_feedback`, `gate_block_reasons`, and concrete figure/caption fixes.

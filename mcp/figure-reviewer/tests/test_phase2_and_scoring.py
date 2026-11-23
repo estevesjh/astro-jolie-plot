@@ -92,7 +92,7 @@ def _fake_master_payload(
         ),
         colormap_feedback=ColormapFeedback(
             matches_house_preferences="ALIGNED",
-            palette_diagnosis="Matches DECADE palette.",
+            palette_diagnosis="Matches house palette.",
             stretch_and_midpoint_verdict="N/A",
             recommended_colormap_or_palette="Keep current",
             color_fixes=[],

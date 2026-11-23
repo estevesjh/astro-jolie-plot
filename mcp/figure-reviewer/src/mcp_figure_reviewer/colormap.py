@@ -3,7 +3,7 @@
 Zero-LLM-token analyzer (Pillow + NumPy) that extracts dominant chromatic colors from a
 rendered figure, detects common colormap anti-patterns (default matplotlib tab10,
 rainbow/jet maps, dead chalky low-chroma fills), and checks alignment with configurable
-house style preferences (default: the Anbajagane/DECADE + Sanzo Wada rules).
+house style preferences (default: the house style + Sanzo Wada rules).
 """
 
 from __future__ import annotations
@@ -37,33 +37,33 @@ TAB10_HEXES = [
 HOUSE_PALETTES: dict[str, list[str]] = {
     "classic3": ["#b22222", "#000000", "#808080"],
     "hist2_skyblue_red": ["#87ceeb", "#ff0000"],
-    "decade2": ["#219ebc", "#ffba0a"],
-    "decade3": ["#f07167", "#219ebc", "#ffba0a"],
-    "decade4": ["#f07167", "#219ebc", "#ffba0a", "#c767ac"],
-    "decade5": ["#f07167", "#219ebc", "#ffba0a", "#c767ac", "#59a270"],
-    "decade_blues": ["#c6dbef", "#6baed6", "#2171b5"],
+    "pal2": ["#219ebc", "#ffba0a"],
+    "pal3": ["#f07167", "#219ebc", "#ffba0a"],
+    "pal4": ["#f07167", "#219ebc", "#ffba0a", "#c767ac"],
+    "pal5": ["#f07167", "#219ebc", "#ffba0a", "#c767ac", "#59a270"],
+    "blues3": ["#c6dbef", "#6baed6", "#2171b5"],
     "getdist2": ["#e03424", "#006fed"],
     "vol1-2": ["#12354e", "#f99d1b"],
     "vol1-164": ["#dd4027", "#fcb315", "#4f4086"],
     "vol1-267": ["#006eb8", "#00978d", "#f99d1b", "#fdbf68"],
     "vol1-331": ["#1e0e3f", "#c53c69", "#4f4086", "#9a72aa"],
     "vol1-323": ["#111314", "#762c19", "#b2b73e", "#fdc57e"],
-    "decade_sky_div": ["#219ebc", "#ffffff", "#c767ac"],
+    "sky_div": ["#219ebc", "#ffffff", "#c767ac"],
     "tyrian_div": ["#12354e", "#f3efe6", "#dd4027"],
     "wada331_div": ["#4f4086", "#f3f0e7", "#c53c69"],
 }
 
-ESTEVES_COLOR_PREFERENCES = """House Color & Colormap Preferences (`esteves_plot.py` / Anbajagane-DECADE + Sanzo Wada):
+ESTEVES_COLOR_PREFERENCES = """House Color & Colormap Preferences (`esteves_plot.py` / house style + Sanzo Wada):
 1. Banned defaults: NEVER use default matplotlib `tab10` colors, rainbow/`jet` colormaps, or lifeless chalky low-chroma fills (e.g. `#DCE3EC` / `lightsteelblue`, where HLS lightness > 0.72 and saturation < 0.50).
 2. Curated discrete palettes (matched to role):
    - Model vs. data/mock vs. baseline (2-3 curves): `classic3` (`["firebrick", "black", "grey"]`).
-   - Primary vs. secondary surveys / 2-5 category curves: `decade2` (`#219ebc` Teal, `#ffba0a` Marigold), `decade3` (`#f07167` Coral, `#219ebc`, `#ffba0a`), `decade4` (+ `#c767ac` Plum), `decade5` (+ `#59a270` Sage Green).
+   - Primary vs. secondary surveys / 2-5 category curves: `pal2` (`#219ebc` Teal, `#ffba0a` Marigold), `pal3` (`#f07167` Coral, `#219ebc`, `#ffba0a`), `pal4` (+ `#c767ac` Plum), `pal5` (+ `#59a270` Sage Green).
    - Histograms: saturated `#219ebc` `stepfilled` (alpha~0.65) + unfilled `#ffba0a` `step` outline, OR `hist2` (`skyblue` + `red` KDE).
    - Posterior contours (GetDist): `getdist2` (`#e03424` Brick Red, `#006fed` Cobalt Steel) with 68%/95%/99% nested fills vs. dashed outlines.
    - Sanzo Wada plates: `vol1-164` (`#dd4027, #fcb315, #4f4086`), `vol1-2` (`#12354e, #f99d1b`), `vol1-267`, `vol1-331`, `vol1-323`.
 3. Preferred continuous colormaps:
-   - **Diverging correlation matrices, residuals, and signed 2D maps (PREFERRED):** Soft **`RdBu_r`** (truncated to `[0.10, 0.90]` so endpoints stay rich and never crush into near-black maroon/navy!) OR **`decade_sky`** (`#219ebc` Teal -> pure `#ffffff` white -> `#c767ac` Plum) / `coolwarm`. Avoid dark, heavy navy/brick-red diverging maps like `tyrian_div` on correlation matrices.
-   - **Sequential positive-only maps / footprints:** `decade_teal`, `decade_gold`, `decade_blues`, `rocket_r`, `wada323`.
+   - **Diverging correlation matrices, residuals, and signed 2D maps (PREFERRED):** Soft **`RdBu_r`** (truncated to `[0.10, 0.90]` so endpoints stay rich and never crush into near-black maroon/navy!) OR **`sky_div`** (`#219ebc` Teal -> pure `#ffffff` white -> `#c767ac` Plum) / `coolwarm`. Avoid dark, heavy navy/brick-red diverging maps like `tyrian_div` on correlation matrices.
+   - **Sequential positive-only maps / footprints:** `teal_seq`, `gold_seq`, `blues3`, `rocket_r`, `wada323`.
    - **Ordered multi-curve ladders (`N >= 5` monotonic bins, e.g. richness thresholds):** NEVER sample rainbow-like multi-hue ramps (such as `wada164_safe`, `jet`, `turbo`) for `plt.plot` lines — they produce jarring violet-navy-teal-green-yellow-orange ladders that clash with 2D heatmaps! Use a single harmonious monotonic ramp (e.g. `PuBu`/`Blues` `[0.38, 0.92]`, `rocket` `[0.18, 0.76]`, `Reds` `[0.30, 0.88]`) OR matched two-pole colors drawn directly from the companion `RdBu_r` heatmap (skipping white).
    - **Cross-panel color harmony:** When a multi-panel figure pairs a 2D heatmap with 1D curve panels, curve colors MUST harmonize with the heatmap colormap family.
    - **`scatter(..., c=z)` on white background:** `wada164_safe` (for colored scatter clouds only, NOT 1D line ladders!).
@@ -86,7 +86,7 @@ def get_color_preferences_text(
 ) -> str:
     """Return the active color/colormap preference guide for Master Gate & Reviewer 2."""
     key = (style_profile or "esteves").strip().lower()
-    if key in {"esteves", "house", "decade", "anbajagane", "wada"}:
+    if key in {"esteves", "house", "wada"}:
         base = ESTEVES_COLOR_PREFERENCES
     elif key in {"generic", "standard", "journal"}:
         base = GENERIC_COLOR_PREFERENCES
@@ -216,13 +216,13 @@ def analyze_figure_colors(png_bytes: bytes) -> ColorForensics:
         )
     if rainbow_suspected:
         notes.append(
-            "Rainbow/`jet`-like full-spectrum hues detected; replace with `decade_sky` "
+            "Rainbow/`jet`-like full-spectrum hues detected; replace with `sky_div` "
             "(#219ebc -> #ffffff -> #c767ac), soft `RdBu_r`/`coolwarm`, `wada323`, or `wada164_safe`."
         )
     if tab10_suspected:
         notes.append(
             f"Default matplotlib `tab10`-like colors detected ({', '.join(matched_tab10)}); "
-            "consider the curated `decade2/3/4/5`, `classic3`, or Sanzo Wada (`vol1-164`, `vol1-2`, `vol1-331`)."
+            "consider the curated `pal2/3/4/5`, `classic3`, or Sanzo Wada (`vol1-164`, `vol1-2`, `vol1-331`)."
         )
     if dead_pale_fraction > 0.06 and not is_likely_heatmap:
         notes.append(
@@ -233,7 +233,7 @@ def analyze_figure_colors(png_bytes: bytes) -> ColorForensics:
         notes.append(f"Matches palette/colormap signature(s): {', '.join(matched_palettes[:4])}.")
     if is_likely_heatmap and "tyrian_div" in matched_palettes:
         notes.append(
-            "Dark navy/brick `tyrian_div` heatmap detected: prefer cleaner `decade_sky` "
+            "Dark navy/brick `tyrian_div` heatmap detected: prefer cleaner `sky_div` "
             "(#219ebc -> #ffffff -> #c767ac) or soft `RdBu_r`/`coolwarm` anchored at 0 via TwoSlopeNorm(vcenter=0)."
         )
     if is_likely_heatmap:
@@ -283,7 +283,7 @@ def audit_colorbar_midpoints_deterministically(
                         f"Diverging colorbar white/neutral center sits at {mid:+.2f} instead of 0.0 "
                         f"({abs(mid)/span:.0%} of span off-zero), causing uncorrelated 0.0 cells to "
                         "render strongly colored. Anchor white at 0 with "
-                        "`TwoSlopeNorm(vmin, vcenter=0.0, vmax)` and use `decade_sky` or soft `RdBu_r`/`coolwarm`."
+                        "`TwoSlopeNorm(vmin, vcenter=0.0, vmax)` and use `sky_div` or soft `RdBu_r`/`coolwarm`."
                     ),
                 )
             )

@@ -22,14 +22,14 @@ def _png_bytes(img: Image.Image) -> bytes:
     return buf.getvalue()
 
 
-def test_detects_decade4_house_palette_cleanly() -> None:
+def test_detects_pal4_house_palette_cleanly() -> None:
     img = Image.new("RGB", (400, 300), (255, 255, 255))
     draw = ImageDraw.Draw(img)
     for i, color in enumerate(["#f07167", "#219ebc", "#ffba0a", "#c767ac"]):
         draw.rectangle([20, 20 + i * 60, 380, 60 + i * 60], fill=color)
 
     forensics = analyze_figure_colors(_png_bytes(img))
-    assert "decade4" in forensics.matched_house_palettes
+    assert "pal4" in forensics.matched_house_palettes
     assert forensics.tab10_suspected is False
     assert forensics.rainbow_jet_suspected is False
 
@@ -70,14 +70,14 @@ def test_detects_dead_pale_chalky_histogram_fill() -> None:
 
 def test_color_preferences_profile_supports_esteves_generic_and_custom() -> None:
     esteves = get_color_preferences_text("esteves")
-    assert "decade_sky" in esteves
+    assert "sky_div" in esteves
     assert "TwoSlopeNorm" in esteves
-    assert "decade4" in esteves
+    assert "pal4" in esteves
     assert "vol1-164" in esteves
 
     generic = get_color_preferences_text("generic", custom_preferences="Prefer cividis for maps.")
     assert "cividis" in generic
-    assert "decade_sky" not in generic
+    assert "sky_div" not in generic
 
 
 def test_deterministic_colorbar_midpoint_audit_catches_off_zero_white() -> None:

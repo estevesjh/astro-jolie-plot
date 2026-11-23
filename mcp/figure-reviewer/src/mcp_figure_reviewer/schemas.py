@@ -492,7 +492,7 @@ class ColormapFeedback(BaseModel):
         description="Assessment of diverging midpoint anchoring (0 or median) and central percentile stretch."
     )
     recommended_colormap_or_palette: str = Field(
-        description="Specific house colormap/palette recommendation (e.g. tyrian_div, decade4, vol1-164, wada164_safe) or 'Keep current'."
+        description="Specific house colormap/palette recommendation (e.g. tyrian_div, pal4, vol1-164, wada164_safe) or 'Keep current'."
     )
     color_fixes: list[str] = Field(
         default_factory=list,

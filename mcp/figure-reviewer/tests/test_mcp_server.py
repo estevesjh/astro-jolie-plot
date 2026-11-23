@@ -116,9 +116,9 @@ async def test_mcp_blind_then_master_roundtrip(
         ),
         colormap_feedback=ColormapFeedback(
             matches_house_preferences="ALIGNED",
-            palette_diagnosis="Uses teal and coral consistent with DECADE style.",
+            palette_diagnosis="Uses teal and coral consistent with the house style.",
             stretch_and_midpoint_verdict="N/A (line plot).",
-            recommended_colormap_or_palette="Keep current (decade2/decade3)",
+            recommended_colormap_or_palette="Keep current (pal2/pal3)",
             color_fixes=[],
         ),
         filename_audit=FilenameAudit(

@@ -58,13 +58,13 @@ save(fig, "ladder")
 ep.apply_style("paper")
 fig, (a, b) = plt.subplots(1, 2, figsize=(7.6, 3.4), gridspec_kw=dict(wspace=0.28))
 x1, x2 = rng.normal(0, 1, 6000), rng.normal(0.15, 1.1, 6000)
-ep.plot_step_hist(a, x1, bins=40, color="#219ebc", label="DECADE")
-ep.plot_step_hist(a, x2, bins=40, color="#ffba0a", filled=False, label="DES")
+ep.plot_step_hist(a, x1, bins=40, color="#219ebc", label="Survey A")
+ep.plot_step_hist(a, x2, bins=40, color="#ffba0a", filled=False, label="Survey B")
 a.set_xlabel(r"$\ln\lambda$"); a.set_ylabel("Density"); a.legend(frameon=False, fontsize=9)
 xs = rng.normal(0, 1, 400); ys = xs + rng.normal(0, 0.35, 400)
 ep.plot_scatter_compare(b, xs, ys, color="#219ebc")
 lim = (-3.5, 3.5); b.plot(lim, lim, ls=":", color="0.3", lw=1); b.set_xlim(lim); b.set_ylim(lim)
-b.set_xlabel(r"$\ln\lambda_{\rm DECADE}$"); b.set_ylabel(r"$\ln\lambda_{\rm DES}$")
+b.set_xlabel(r"$\ln\lambda_{\rm A}$"); b.set_ylabel(r"$\ln\lambda_{\rm B}$")
 ep.style_axes([a, b])
 save(fig, "hist_scatter")
 
@@ -109,7 +109,7 @@ save(fig, "colorbar_midpoint")
 # 6. Palette strip ----------------------------------------------------------------------------
 ep.apply_style("daily")
 rows = [("classic3", ep.get_palette(name="classic3")), ("hist2", ep.get_palette(name="hist2")),
-        ("decade4", ep.get_palette(name="decade4")), ("decade5", ep.get_palette(name="decade5")),
+        ("pal4", ep.get_palette(name="pal4")), ("pal5", ep.get_palette(name="pal5")),
         ("vol1-164", ep.get_palette(name="vol1-164")), ("vol1-2", ep.get_palette(name="vol1-2")),
         ("vol1-267", ep.get_palette(name="vol1-267")), ("vol1-331", ep.get_palette(name="vol1-331"))]
 fig, ax = plt.subplots(figsize=(6, 0.42 * len(rows)))
