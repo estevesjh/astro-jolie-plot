@@ -1,6 +1,6 @@
-"""Plotting toolkit with a clean publication
-house style, paired with curated Sanzo Wada plates (vol1-164, vol1-2, vol1-267,
-vol1-331, vol1-323) and density-adaptive scatter / contour / histogram helpers.
+"""Plotting toolkit with a clean publication house style, inspired by the colors and
+plots of Anbajagane et al. (2026), paired with curated Sanzo Wada plates (vol1-164,
+vol1-2, vol1-267, vol1-331, vol1-323) and density-adaptive scatter / contour / histogram helpers.
 """
 from __future__ import annotations
 

@@ -198,7 +198,7 @@ uv run --directory mcp/figure-reviewer --with pytest --with pytest-asyncio pytes
 
 ## Credits
 
-Palettes draw on Sanzo Wada's *A Dictionary of Color Combinations*, through [`sanzo-wada-colors`](https://github.com/estevesjh/sanzo-wada-colors).
+The pretty colors and plots are inspired by Anbajagane et al. (2026). Palettes also draw on Sanzo Wada's *A Dictionary of Color Combinations*, through [`sanzo-wada-colors`](https://github.com/estevesjh/sanzo-wada-colors).
 
 ## License
 
