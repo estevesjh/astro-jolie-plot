@@ -1,17 +1,17 @@
 {
-  "name": "plotting-skills",
+  "name": "astro-jolie-plot",
   "owner": {
     "name": "estevesjh"
   },
   "plugins": [
     {
-      "name": "plotting-skills",
+      "name": "astro-jolie-plot",
       "source": "./",
-      "description": "Plotting defaults plus a blind two-phase figure review run by Claude models.",
+      "description": "Astro-ready publication plots plus a blind two-phase figure review run by Claude models.",
       "author": {
         "name": "estevesjh"
       }
     }
   ],
-  "description": "Plotting defaults and a blind figure review for scientists, run by Claude models."
+  "description": "Jolie, honest plots for astrophysics, reviewed by a blind Claude reader."
 }

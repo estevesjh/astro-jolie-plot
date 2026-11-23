@@ -1,14 +1,16 @@
 {
-  "name": "plotting-skills",
+  "name": "astro-jolie-plot",
   "version": "1.0.0",
-  "description": "Publication plotting defaults for matplotlib and seaborn, plus a blind two-phase figure review run by Claude models.",
+  "description": "Astro-ready publication plots (matplotlib, seaborn, Sanzo Wada palettes) plus a blind two-phase figure review run by Claude models.",
   "license": "MIT",
   "keywords": [
+    "astrophysics",
+    "cosmology",
     "matplotlib",
     "seaborn",
     "figures",
     "peer-review",
-    "astrophysics"
+    "sanzo-wada"
   ],
   "author": {
     "name": "estevesjh"

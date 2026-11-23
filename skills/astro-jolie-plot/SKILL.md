@@ -1,12 +1,12 @@
 ---
-name: plotting
+name: astro-jolie-plot
 description: A plotting design guide and toolkit following the Anbajagane et al. (2026, OJA/DECADE) publication style — serif Computer Modern typography, boxed 4-sided grey spines (0.55) with inward major/minor grey ticks, less-is-more information and layout restraint, zero-gap stacked grids, filled-vs-step and skyblue/red KDE histograms, 68/95/99% contours, open-ring or micro-dot scatters, Sanzo Wada favorites (vol1-164, vol1-2, vol1-331, vol1-267, vol1-323), and mandatory visual PNG QA.
 ---
 
 # Anbajagane + Sanzo Wada Plotting Standard (`esteves_plot.py`)
 
 Helper module installed inside this skill:
-`scripts/esteves_plot.py`, next to this file (`${CLAUDE_PLUGIN_ROOT}/skills/plotting/scripts/` when installed as a plugin).
+`scripts/esteves_plot.py`, next to this file (`${CLAUDE_PLUGIN_ROOT}/skills/astro-jolie-plot/scripts/` when installed as a plugin).
 *(Needs `matplotlib`, `seaborn` and, for more than three categories, `sanzo-wada`: `pip install git+https://github.com/estevesjh/sanzo-wada-colors`.)*
 
 ---
