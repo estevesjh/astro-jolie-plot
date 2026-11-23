@@ -1,0 +1,16 @@
+{
+  "name": "plotting-skills",
+  "version": "1.0.0",
+  "description": "Publication plotting defaults for matplotlib and seaborn, plus a blind two-phase figure review run by Claude models.",
+  "license": "MIT",
+  "keywords": [
+    "matplotlib",
+    "seaborn",
+    "figures",
+    "peer-review",
+    "astrophysics"
+  ],
+  "author": {
+    "name": "estevesjh"
+  }
+}

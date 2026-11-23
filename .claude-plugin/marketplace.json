@@ -1,0 +1,17 @@
+{
+  "name": "plotting-skills",
+  "owner": {
+    "name": "estevesjh"
+  },
+  "plugins": [
+    {
+      "name": "plotting-skills",
+      "source": "./",
+      "description": "Plotting defaults plus a blind two-phase figure review run by Claude models.",
+      "author": {
+        "name": "estevesjh"
+      }
+    }
+  ],
+  "description": "Plotting defaults and a blind figure review for scientists, run by Claude models."
+}

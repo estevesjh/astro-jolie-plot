@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "figure_reviewer_mcp": {
+      "command": "uv",
+      "args": ["run", "--directory", "${CLAUDE_PLUGIN_ROOT}/mcp/figure-reviewer", "mcp-figure-reviewer"],
+      "env": { "FIGURE_REVIEW_BACKEND": "claude_cli" }
+    }
+  }
+}
